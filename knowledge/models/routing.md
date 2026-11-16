@@ -14,6 +14,8 @@ updated: 2026-11-16
 - 2026-11-15 — auto classifies the request and fails over across providers; observed latency about 1.5 seconds.
 - 2026-11-15 — intelligence_rank is lower-is-smarter, range 17-203 across the catalog.
 
+- 2026-11-16 — No single vendor is the default. Inference runs through the local freellmapi router on 127.0.0.1:3001 using only the operator's own free provider keys, and the serving model is named per answer.
+
 ## Constraints
 
 - <!-- what this domain forbids or bounds -->
