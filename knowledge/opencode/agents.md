@@ -2,6 +2,7 @@
 domain: opencode/agents
 title: Agent roster
 status: seeded
+source: ~/.config/opencode (files on disk)
 updated: 2026-11-15
 ---
 

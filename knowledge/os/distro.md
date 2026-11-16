@@ -2,6 +2,7 @@
 domain: os/distro
 title: Distribution
 status: seeded
+source: /etc/os-release, systemctl --user
 updated: 2026-11-15
 ---
 

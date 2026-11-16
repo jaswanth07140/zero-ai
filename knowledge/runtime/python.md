@@ -2,6 +2,7 @@
 domain: runtime/python
 title: Python
 status: seeded
+source: node -v, git --version, python3 -V
 updated: 2026-11-15
 ---
 

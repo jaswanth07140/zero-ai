@@ -2,6 +2,7 @@
 domain: zero/panel
 title: Panel and admin
 status: seeded
+source: ~/zero-ops and github.com/jaswanth07140/Zero
 updated: 2026-11-15
 ---
 

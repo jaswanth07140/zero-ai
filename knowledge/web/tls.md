@@ -1,7 +1,8 @@
 ---
 domain: web/tls
 title: TLS
-status: scaffold
+status: seeded
+source: curl against 127.0.0.1:3001/v1
 updated: 2026-11-15
 ---
 
@@ -9,7 +10,7 @@ updated: 2026-11-15
 
 ## Facts
 
-- <!-- none yet: add a dated fact when one is verified -->
+- 2026-11-15 — Endpoints used here are loopback HTTP (the router) or HTTPS terminated by the upstream provider; no local TLS is configured. [src: curl targets]
 
 ## Constraints
 

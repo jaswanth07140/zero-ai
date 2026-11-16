@@ -2,6 +2,7 @@
 domain: freellmapi/mcp
 title: MCP surface
 status: seeded
+source: systemctl --user, curl 127.0.0.1:3001
 updated: 2026-11-15
 ---
 

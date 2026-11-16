@@ -23,6 +23,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--domain", required=True, help="category/domain, e.g. hardware/disk")
     ap.add_argument("--fact", required=True)
+    ap.add_argument("--source", help="where this was verified: a path, URL, or command")
     ap.add_argument("--date", default=datetime.date.today().isoformat())
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
@@ -50,6 +51,8 @@ def main():
             return 0
 
     bullet = f"- {a.date} — {a.fact.strip()}"
+    if a.source:
+        bullet += f" [src: {a.source.strip()}]"
     if "## Facts" not in text:
         print("refused: file has no '## Facts' section", file=sys.stderr)
         return 2

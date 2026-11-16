@@ -2,6 +2,7 @@
 domain: ops/cost
 title: Cost
 status: seeded
+source: journalctl --user -u freellmapi
 updated: 2026-11-15
 ---
 

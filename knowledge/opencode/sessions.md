@@ -2,6 +2,7 @@
 domain: opencode/sessions
 title: Sessions and storage
 status: seeded
+source: ~/.config/opencode (files on disk)
 updated: 2026-11-15
 ---
 

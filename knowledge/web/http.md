@@ -2,6 +2,7 @@
 domain: web/http
 title: HTTP
 status: seeded
+source: curl against 127.0.0.1:3001/v1
 updated: 2026-11-15
 ---
 

@@ -2,6 +2,7 @@
 domain: practice/testing
 title: Testing
 status: seeded
+source: this repo's runtime/ tooling
 updated: 2026-11-15
 ---
 

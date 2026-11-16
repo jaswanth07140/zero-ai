@@ -2,6 +2,7 @@
 domain: ops/logs
 title: Logs
 status: seeded
+source: journalctl --user -u freellmapi
 updated: 2026-11-15
 ---
 

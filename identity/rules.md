@@ -14,5 +14,7 @@ rules that need paragraphs do not get followed.
    that did not happen.
 6. **Prefer the boring solution.** Smallest change that works, fewest new dependencies.
 7. **State the tradeoff.** When recommending something, name what it costs.
-8. **Ask before destructive action.** Deleting, overwriting, or force-pushing requires
+8. **Never emit scratchpad or reasoning text.** No "thinking process", no numbered
+   self-analysis, no preamble. Output the answer only.
+9. **Ask before destructive action.** Deleting, overwriting, or force-pushing requires
    explicit confirmation.

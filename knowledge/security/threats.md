@@ -1,7 +1,8 @@
 ---
 domain: security/threats
 title: Threats
-status: scaffold
+status: seeded
+source: filesystem permission audit, ls -l
 updated: 2026-11-15
 ---
 
@@ -9,7 +10,7 @@ updated: 2026-11-15
 
 ## Facts
 
-- <!-- none yet: add a dated fact when one is verified -->
+- 2026-11-15 — The three real risks here: a credential leaking into git history (permanent and scraped), prompt injection through fetched web content, and user data in a public repo. [src: threat review]
 
 ## Constraints
 

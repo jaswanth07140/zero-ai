@@ -2,6 +2,7 @@
 domain: security/secrets
 title: Secrets
 status: seeded
+source: filesystem permission audit, ls -l
 updated: 2026-11-15
 ---
 

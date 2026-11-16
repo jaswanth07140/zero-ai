@@ -2,6 +2,7 @@
 domain: security/auth
 title: Authentication
 status: seeded
+source: filesystem permission audit, ls -l
 updated: 2026-11-15
 ---
 

@@ -261,6 +261,107 @@ def cmd_lint(args):
     return 0
 
 
+# ---------------------------------------------------------------- audit
+
+def cmd_audit(args):
+    """Report what to upgrade next: empty domains, stale facts, thin categories."""
+    tax = load_taxonomy()
+    today = datetime.date.today()
+    files = all_domain_files()
+
+    per_cat, per_dom, stale = {}, {}, []
+    for p in files:
+        meta, facts, _ = parse_domain_file(p)
+        dom = domain_id(p)
+        cat = dom.split("/")[0]
+        per_dom[dom] = len(facts)
+        per_cat[cat] = per_cat.get(cat, 0) + len(facts)
+        for d, text in facts:
+            try:
+                age = (today - datetime.date.fromisoformat(d)).days
+            except ValueError:
+                continue
+            if age > args.stale_days:
+                stale.append((age, dom, text[:80]))
+
+    scaffolds = sorted(d for d, n in per_dom.items() if n == 0)
+    counts = sorted(per_cat.values())
+    median = counts[len(counts) // 2] if counts else 0
+
+    print(f"audit — {len(files)} domains, {sum(per_dom.values())} facts, median {median}/category\n")
+
+    print(f"1. EMPTY DOMAINS ({len(scaffolds)}) — breadth work")
+    for d in scaffolds:
+        print(f"   {d}")
+    if not scaffolds:
+        print("   none — every domain has at least one fact")
+
+    thin = [(c, n) for c, n in sorted(per_cat.items(), key=lambda x: x[1]) if n < median]
+    print(f"\n2. THIN CATEGORIES (below median {median}) — depth work")
+    for c, n in thin:
+        print(f"   {c:<12} {n:>3} facts")
+    if not thin:
+        print("   none — coverage is even")
+
+    print(f"\n3. STALE FACTS (>{args.stale_days} days) — verification work")
+    if stale:
+        for age, dom, text in sorted(stale, reverse=True)[:15]:
+            print(f"   {age:>4}d  {dom:<24} {text}")
+    else:
+        print("   none — everything is recent")
+
+    print("\n4. SUGGESTED NEXT 5")
+    suggestions = [f"fill {d}" for d in scaffolds[:3]]
+    suggestions += [f"deepen {c}" for c, _ in thin[:2]]
+    for s in suggestions[:5]:
+        print(f"   - {s}")
+    return 0
+
+
+# ---------------------------------------------------------------- accuracy
+
+def cmd_accuracy(args):
+    """Score the brain on traceability, not volume."""
+    files = all_domain_files()
+    total = sourced = unverified = 0
+    unsourced = []
+    for p in files:
+        meta, facts, _ = parse_domain_file(p)
+        has_file_source = bool(meta.get("source"))
+        for d, t in facts:
+            total += 1
+            if "[src:" in t or has_file_source:
+                sourced += 1
+            else:
+                unsourced.append((domain_id(p), t[:70]))
+            if "(unverified)" in t:
+                unverified += 1
+
+    cases = 0
+    cpath = ROOT / "evals" / "cases.jsonl"
+    if cpath.exists():
+        cases = sum(1 for line in cpath.read_text(encoding="utf-8").splitlines()
+                    if line.strip() and not line.strip().startswith("#"))
+
+    src_ratio = sourced / total if total else 0.0
+    unver_ratio = unverified / total if total else 0.0
+    eval_score = min(cases / 10, 1.0)
+    score = round((src_ratio * 0.5 + (1 - unver_ratio) * 0.3 + eval_score * 0.2) * 100)
+
+    print(f"accuracy score: {score}/100\n")
+    print(f"  traceability : {sourced}/{total} facts cite a source ({src_ratio:.0%})  weight 50%")
+    print(f"  confidence   : {total - unverified}/{total} not marked unverified ({(1-unver_ratio):.0%})  weight 30%")
+    print(f"  eval coverage: {cases} case(s), full marks at 10  weight 20%")
+
+    if unsourced:
+        print(f"\n  {len(unsourced)} fact(s) with no [src: ...] — add provenance:")
+        for dom, t in unsourced[:args.show]:
+            print(f"    {dom:<24} {t}")
+        if len(unsourced) > args.show:
+            print(f"    ... and {len(unsourced) - args.show} more")
+    return 0
+
+
 # ---------------------------------------------------------------- grow
 
 def cmd_grow(args):
@@ -311,6 +412,14 @@ def main():
     p.set_defaults(fn=cmd_build)
 
     p = sub.add_parser("lint"); p.set_defaults(fn=cmd_lint)
+
+    p = sub.add_parser("audit")
+    p.add_argument("--stale-days", type=int, default=90)
+    p.set_defaults(fn=cmd_audit)
+
+    p = sub.add_parser("accuracy")
+    p.add_argument("--show", type=int, default=10)
+    p.set_defaults(fn=cmd_accuracy)
 
     p = sub.add_parser("grow")
     p.add_argument("--domain", required=True)

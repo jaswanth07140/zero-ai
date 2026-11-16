@@ -1,7 +1,8 @@
 ---
 domain: web/dns
 title: DNS
-status: scaffold
+status: seeded
+source: curl against 127.0.0.1:3001/v1
 updated: 2026-11-15
 ---
 
@@ -9,7 +10,7 @@ updated: 2026-11-15
 
 ## Facts
 
-- <!-- none yet: add a dated fact when one is verified -->
+- 2026-11-15 — Zero is served at zero.page.gd; DNS is provider-managed and nothing about it is configured from this machine. [src: llms.txt]
 
 ## Constraints
 

@@ -1,7 +1,8 @@
 ---
 domain: web/performance
 title: Performance
-status: scaffold
+status: seeded
+source: curl against 127.0.0.1:3001/v1
 updated: 2026-11-15
 ---
 
@@ -9,7 +10,7 @@ updated: 2026-11-15
 
 ## Facts
 
-- <!-- none yet: add a dated fact when one is verified -->
+- 2026-11-15 — auto answers in about 1.5s on a warm provider; a cold Google attempt can burn a 60s timeout before failover, which is why the failover budget matters. [src: curl timings]
 
 ## Constraints
 

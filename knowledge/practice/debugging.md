@@ -1,7 +1,8 @@
 ---
 domain: practice/debugging
 title: Debugging
-status: scaffold
+status: seeded
+source: this repo's runtime/ tooling
 updated: 2026-11-15
 ---
 
@@ -9,7 +10,7 @@ updated: 2026-11-15
 
 ## Facts
 
-- <!-- none yet: add a dated fact when one is verified -->
+- 2026-11-15 — Debug order that isolated the real fault: systemctl status, then journalctl tail, then curl with an explicit model id, then a DB query for key status. The failures were provider-side (HTTP 503, 60s timeout), not configuration. [src: this session]
 
 ## Constraints
 

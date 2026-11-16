@@ -2,6 +2,7 @@
 domain: models/catalog
 title: Catalog
 status: seeded
+source: freellmapi DB: api_keys, models tables
 updated: 2026-11-15
 ---
 

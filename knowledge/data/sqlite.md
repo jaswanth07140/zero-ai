@@ -2,6 +2,7 @@
 domain: data/sqlite
 title: SQLite
 status: seeded
+source: sqlite3 freellmapi/server/data/freeapi.db
 updated: 2026-11-15
 ---
 

@@ -2,6 +2,7 @@
 domain: os/packages
 title: Package management
 status: seeded
+source: /etc/os-release, systemctl --user
 updated: 2026-11-15
 ---
 

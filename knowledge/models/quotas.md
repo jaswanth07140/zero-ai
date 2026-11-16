@@ -2,6 +2,7 @@
 domain: models/quotas
 title: Quotas and limits
 status: seeded
+source: freellmapi DB: api_keys, models tables
 updated: 2026-11-15
 ---
 

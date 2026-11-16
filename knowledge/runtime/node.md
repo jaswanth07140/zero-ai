@@ -2,6 +2,7 @@
 domain: runtime/node
 title: Node.js
 status: seeded
+source: node -v, git --version, python3 -V
 updated: 2026-11-15
 ---
 

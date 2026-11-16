@@ -1,7 +1,8 @@
 ---
 domain: security/hardening
 title: Hardening
-status: scaffold
+status: seeded
+source: filesystem permission audit, ls -l
 updated: 2026-11-15
 ---
 
@@ -9,7 +10,7 @@ updated: 2026-11-15
 
 ## Facts
 
-- <!-- none yet: add a dated fact when one is verified -->
+- 2026-11-15 — The router binds loopback only (HOST=127.0.0.1), secrets are mode 600, and every repo ignores config.php, *.dat.php, backups/, *.key and *.token. [src: freellmapi/.env, .gitignore files]
 
 ## Constraints
 

@@ -2,6 +2,7 @@
 domain: hardware/memory
 title: Memory
 status: seeded
+source: /proc/cpuinfo, free -h, df -h
 updated: 2026-11-15
 ---
 

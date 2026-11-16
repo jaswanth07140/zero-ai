@@ -1,7 +1,8 @@
 ---
 domain: data/files
 title: Files and layout
-status: scaffold
+status: seeded
+source: sqlite3 freellmapi/server/data/freeapi.db
 updated: 2026-11-15
 ---
 
@@ -9,7 +10,7 @@ updated: 2026-11-15
 
 ## Facts
 
-- <!-- none yet: add a dated fact when one is verified -->
+- 2026-11-15 — Four local repos map one-to-one to GitHub: ~/OpenCode, ~/zero-ai, ~/zero-repo (clone of Zero), ~/code-repo (clone of Code). [src: ls ~ and github API]
 
 ## Constraints
 
