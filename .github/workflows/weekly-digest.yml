@@ -1,0 +1,68 @@
+name: weekly-digest
+
+# A reminder, not an automation: the digest needs a human judgement call about
+# what was durable. This opens (or updates) one issue listing the domains that
+# have no facts yet, so breadth work stays visible.
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Report coverage
+        id: report
+        run: |
+          python3 runtime/brain.py stats --verbose | tee report.txt
+          {
+            echo 'REPORT<<EOF'
+            echo '```'
+            cat report.txt
+            echo '```'
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the digest issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const report = `${{ steps.report.outputs.REPORT }}`;
+            const title = 'Weekly brain digest';
+            const body = [
+              'It is time to distill the week into durable facts.',
+              '',
+              '1. Run `python3 runtime/brain.py stats --verbose` locally.',
+              '2. Pick the empty or stale domains that matter.',
+              '3. Add facts with `runtime/ingest.py`, or prune ones that stopped being true.',
+              '4. Commit and close this issue.',
+              '',
+              report,
+            ].join('\n');
+
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'digest',
+            });
+            const open = existing.data.find(i => i.title === title);
+            if (open) {
+              await github.rest.issues.update({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: open.number, body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title, body, labels: ['digest'],
+              });
+            }

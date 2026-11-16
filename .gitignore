@@ -1,0 +1,17 @@
+# generated prompt output
+prompt.txt
+brain/INDEX.md
+
+# python
+__pycache__/
+*.pyc
+
+# secrets — never commit
+.env
+*.token
+*.key
+credentials*
+
+# os noise
+.DS_Store
+Thumbs.db

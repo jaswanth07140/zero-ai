@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "hardware",
+      "title": "Hardware",
+      "domains": [
+        { "id": "cpu", "title": "CPU", "seed": [
+          "2026-11-16 — Intel i3-1215U, 8 logical threads, 12th gen."
+        ]},
+        { "id": "memory", "title": "Memory", "seed": [
+          "2026-11-16 — 6.3 GB total RAM, ~1.9 GB available under normal load, no swap configured."
+        ]},
+        { "id": "disk", "title": "Disk", "seed": [
+          "2026-11-16 — Single volume /dev/vdb, 7.9 GB total, 3.3 GB used, 4.3 GB free."
+        ]},
+        { "id": "gpu", "title": "GPU", "seed": [
+          "2026-11-16 — No GPU: no /dev/dri, no CUDA, no nvidia-smi. All inference must be remote.",
+          "2026-11-16 — Local model ceiling is roughly 1B parameters quantized, 5-10 tokens/sec on CPU."
+        ]}
+      ]
+    },
+    {
+      "id": "os",
+      "title": "Operating system",
+      "domains": [
+        { "id": "distro", "title": "Distribution", "seed": [
+          "2026-11-16 — Debian 13 (trixie), x86_64 container. User uid 1000."
+        ]},
+        { "id": "systemd", "title": "systemd", "seed": [
+          "2026-11-16 — System units unavailable; user units in ~/.config/systemd/user work and persist with linger enabled."
+        ]},
+        { "id": "packages", "title": "Package management", "seed": [
+          "2026-11-16 — apt 3.0.3 available and `sudo -n` succeeds without a password prompt."
+        ]},
+        { "id": "shell", "title": "Shell and PATH", "seed": [
+          "2026-11-16 — bash; PATH additions live in ~/.bashrc (~/.local/node/bin), so non-interactive shells may not see node."
+        ]}
+      ]
+    },
+    {
+      "id": "runtime",
+      "title": "Language runtimes",
+      "domains": [
+        { "id": "node", "title": "Node.js", "seed": [
+          "2026-11-16 — Node 24.22.3 at ~/.local/node/bin/node; a duplicate v22 install was deleted to reclaim 199 MB."
+        ]},
+        { "id": "python", "title": "Python", "seed": [
+          "2026-11-16 — python3 with standard library only is sufficient; no pip dependency is required for repo tooling."
+        ]},
+        { "id": "git", "title": "Git", "seed": [
+          "2026-11-16 — git 2.47.3 installed via apt; no global user.name/email configured, so commits need -c flags or a local config.",
+          "2026-11-16 — `gh` CLI is NOT installed; GitHub access uses a fine-grained PAT at ~/.config/opencode/gh.token (mode 600)."
+        ]},
+        { "id": "containers", "title": "Containers", "seed": [
+          "2026-11-16 — docker and bun are absent; anything requiring them cannot run here."
+        ]}
+      ]
+    },
+    {
+      "id": "opencode",
+      "title": "OpenCode",
+      "domains": [
+        { "id": "config", "title": "Configuration", "seed": [
+          "2026-11-16 — Global config at ~/.config/opencode/opencode.json using the V2 schema (providers, mcp.servers, agents); the V1 provider/npm shape is deprecated.",
+          "2026-11-16 — The `instructions` array is the durable cross-session memory hook; files listed there load into every new session."
+        ]},
+        { "id": "agents", "title": "Agent roster", "seed": [
+          "2026-11-16 — 87 agency agents installed as markdown in ~/.config/opencode/agents plus 27 ECC JSON agents, for 114 total.",
+          "2026-11-16 — OpenCode caps at roughly 119 agents; adding more requires removing some.",
+          "2026-11-16 — Agent ID is the filename; the ECC code-reviewer collided with the agency copy, renamed to agency-code-reviewer."
+        ]},
+        { "id": "skills", "title": "Skills", "seed": [
+          "2026-11-16 — 47 ECC skills live in ~/.config/opencode/skills; each is a directory with a SKILL.md."
+        ]},
+        { "id": "sessions", "title": "Sessions and storage", "seed": [
+          "2026-11-16 — Session transcripts live in ~/.local/share/opencode/opencode.db (about 27 MB plus WAL); it indexes skills by name and description, not their full content."
+        ]}
+      ]
+    },
+    {
+      "id": "models",
+      "title": "Models and inference",
+      "domains": [
+        { "id": "providers", "title": "Providers", "seed": [
+          "2026-11-16 — Three upstream providers are configured and verified returning real completions: google, groq, openrouter.",
+          "2026-11-16 — NVIDIA NIM never issued a usable key; Cerebras, HuggingFace, and Ollama Cloud have zero models in the catalog."
+        ]},
+        { "id": "routing", "title": "Routing", "seed": [
+          "2026-11-16 — auto classifies the request and fails over across providers; observed latency about 1.5 seconds.",
+          "2026-11-16 — intelligence_rank is lower-is-smarter, range 17-203 across the catalog."
+        ]},
+        { "id": "quotas", "title": "Quotas and limits", "seed": [
+          "2026-11-16 — Groq offers up to 14400 RPD on some models; Google allows roughly 20 RPD per model; OpenRouter free models cap at 50 RPD each.",
+          "2026-11-16 — Free-tier limits are per platform and per model, which is why pooling many providers beats picking one."
+        ]},
+        { "id": "catalog", "title": "Catalog", "seed": [
+          "2026-11-16 — Router catalog is a monthly snapshot (2026.11.15): 42 platforms, 483 models, 329 /v1/models ids including auto and fusion."
+        ]}
+      ]
+    },
+    {
+      "id": "freellmapi",
+      "title": "FreeLLMAPI router",
+      "domains": [
+        { "id": "service", "title": "Service", "seed": [
+          "2026-11-16 — Runs as a systemd user unit bound to 127.0.0.1:3001, Restart=on-failure, linger enabled so it survives logout.",
+          "2026-11-16 — Health checks: GET / returns 200, GET /v1/models returns 200 with a bearer key and 401 without one."
+        ]},
+        { "id": "keys", "title": "Keys", "seed": [
+          "2026-11-16 — The unified key is stored at ~/.config/opencode/freellmapi.key (mode 600, no trailing newline) and referenced via {file:...}.",
+          "2026-11-16 — Upstream provider keys are entered in the dashboard and stored encrypted in the api_keys table (encrypted_key/iv/auth_tag)."
+        ]},
+        { "id": "dashboard", "title": "Dashboard", "seed": [
+          "2026-11-16 — Dashboard at http://127.0.0.1:3001; the Keys page is where provider keys are added; loopback browsers skip the first-run setup code."
+        ]},
+        { "id": "mcp", "title": "MCP surface", "seed": [
+          "2026-11-16 — MCP mounts at /mcp but is off by default; enabling requires PUT /api/settings/enable-mcp."
+        ]}
+      ]
+    },
+    {
+      "id": "zero",
+      "title": "Zero project",
+      "domains": [
+        { "id": "site", "title": "Site", "seed": [
+          "2026-11-16 — Zero is a free AI search engine at zero.page.gd with chat, maps, and video; no sign-up required.",
+          "2026-11-16 — Source in ~/zero-ops/site/src-5.0.6/zero-site, PHP, version 5.0.6, 216 files.",
+          "2026-11-16 — GitHub repo jaswanth07140/Zero holds zero-site/, zero-extension/, and a 5.2 MB source zip."
+        ]},
+        { "id": "api", "title": "API layer", "seed": [
+          "2026-11-16 — Five endpoints: api-single.php, api.php, api-council(-v2).php, api-ensemble.php, api-synth.php.",
+          "2026-11-16 — api-single.php accepts provider=auto and routes by heuristic: complex/code prompts use a different priority list than short ones."
+        ]},
+        { "id": "deploy", "title": "Deployment", "seed": [
+          "2026-11-16 — Deployment is blocked from this machine: ftp_tool.py and credentials.env are gone.",
+          "2026-11-16 — patches/opencode-ui.html (an OpenCode-style UI) was built but never deployed or browser-tested."
+        ]},
+        { "id": "panel", "title": "Panel and admin", "seed": [
+          "2026-11-16 — owner.php, panel-api.php, panel-token.php, and monitor.php form the admin surface."
+        ]}
+      ]
+    },
+    {
+      "id": "web",
+      "title": "Web",
+      "domains": [
+        { "id": "http", "title": "HTTP", "seed": [
+          "2026-11-16 — The router speaks OpenAI-compatible /v1/chat/completions and returns structured error codes such as no_providers_configured and upstream_failed."
+        ]},
+        { "id": "dns", "title": "DNS", "seed": [] },
+        { "id": "tls", "title": "TLS", "seed": [] },
+        { "id": "performance", "title": "Performance", "seed": [] }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "Data",
+      "domains": [
+        { "id": "sqlite", "title": "SQLite", "seed": [
+          "2026-11-16 — Router state lives in freellmapi/server/data/freeapi.db; the settings table holds the unified key and operational counters."
+        ]},
+        { "id": "files", "title": "Files and layout", "seed": [] },
+        { "id": "backups", "title": "Backups", "seed": [
+          "2026-11-16 — A full live snapshot of Zero sits in ~/zero-ops/backups/live-20261115-132706 (16 MB) and contains a live config.php — never commit it."
+        ]},
+        { "id": "retention", "title": "Retention", "seed": [
+          "2026-11-16 — The router prunes request history at 90 days or 100k rows and quota history at 7 days, so database growth is bounded."
+        ]}
+      ]
+    },
+    {
+      "id": "security",
+      "title": "Security",
+      "domains": [
+        { "id": "secrets", "title": "Secrets", "seed": [
+          "2026-11-16 — API keys never enter repositories or chat output; they live in mode-600 files or encrypted database columns.",
+          "2026-11-16 — A pasted mcp_token URL parameter matched nothing in its claimed source and was treated as burned without being written to disk.",
+          "2026-11-16 — A GitHub fine-grained PAT lives at ~/.config/opencode/gh.token (600) and is passed to git via http.extraheader, never stored in .git/config."
+        ]},
+        { "id": "auth", "title": "Authentication", "seed": [
+          "2026-11-16 — Admin endpoints require a dashboard session, not the unified API key; the unified key only unlocks /v1."
+        ]},
+        { "id": "threats", "title": "Threats", "seed": [] },
+        { "id": "hardening", "title": "Hardening", "seed": [] }
+      ]
+    },
+    {
+      "id": "practice",
+      "title": "Engineering practice",
+      "domains": [
+        { "id": "testing", "title": "Testing", "seed": [
+          "2026-11-16 — Evals are deterministic substring checks, not LLM judges, so results do not drift or flatter."
+        ]},
+        { "id": "docs", "title": "Documentation", "seed": [] },
+        { "id": "git-workflow", "title": "Git workflow", "seed": [
+          "2026-11-16 — Commit identity changes separately from knowledge changes so history explains why behavior shifted.",
+          "2026-11-16 — Push with a token in an http.extraheader flag so the credential never lands in .git/config."
+        ]},
+        { "id": "debugging", "title": "Debugging", "seed": [] }
+      ]
+    },
+    {
+      "id": "ops",
+      "title": "Operations",
+      "domains": [
+        { "id": "monitoring", "title": "Monitoring", "seed": [] },
+        { "id": "logs", "title": "Logs", "seed": [
+          "2026-11-16 — Service logs go to journald (journalctl --user -u freellmapi) and self-cap; the app no longer writes its own log file."
+        ]},
+        { "id": "cost", "title": "Cost", "seed": [
+          "2026-11-16 — The entire stack runs on free tiers: local router, free provider keys, local files. Marginal cost is zero."
+        ]},
+        { "id": "incidents", "title": "Incidents", "seed": [] }
+      ]
+    }
+  ]
+}
