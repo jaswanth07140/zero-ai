@@ -23,7 +23,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 KNOWLEDGE = ROOT / "knowledge"
 BRAIN = ROOT / "brain"
 TAXONOMY = BRAIN / "taxonomy.json"
-BUDGET_DEFAULT = 24000
+BUDGET_UNLIMITED = None
 
 SECRET_RE = re.compile(
     r"(sk-[A-Za-z0-9]{20,}|gsk_[A-Za-z0-9]{20,}|AIza[0-9A-Za-z_-]{30,}"
@@ -148,7 +148,9 @@ def cmd_stats(args):
     print(f"materialized: {len(files)} files ({seeded} seeded, {scaffold} scaffold)")
     print(f"facts    : {total_facts}  oldest {oldest or 'n/a'}")
     print(f"body size: {chars:,} chars (~{chars // 4:,} tokens)")
-    print(f"budget   : {args.budget:,} chars -> {'OK' if chars <= args.budget else 'OVER by %d' % (chars - args.budget)}")
+    limit = args.budget
+    verdict = "no cap" if limit is None else ("OK" if chars <= limit else f"OVER by {chars - limit}")
+    print(f"budget   : {f'unlimited' if limit is None else f'{limit:,}'} chars -> {verdict}")
     print("\nper category:")
     for cat in tax["categories"]:
         n = by_cat.get(cat["id"], 0)
@@ -193,7 +195,7 @@ def cmd_build(args):
     current = None
     for s, d, dom, text in cands:
         line = f"- {d} — {text}"
-        if used + len(line) + 24 > args.budget:
+        if args.budget is not None and used + len(line) + 24 > args.budget:
             continue
         if dom != current:
             block = f"## KNOWLEDGE — {dom}\n\n"
@@ -223,7 +225,7 @@ def cmd_build(args):
     if args.out:
         pathlib.Path(args.out).write_text(prompt, encoding="utf-8")
         print(f"wrote {args.out}: {len(prompt):,} chars (~{len(prompt)//4:,} tokens), "
-              f"{included}/{len(cands)} facts, budget {args.budget:,}")
+              f"{included}/{len(cands)} facts, budget {'unlimited' if args.budget is None else f'{args.budget:,}'}")
     else:
         sys.stdout.write(prompt)
 
@@ -400,13 +402,13 @@ def main():
     p.set_defaults(fn=cmd_init)
 
     p = sub.add_parser("stats")
-    p.add_argument("--budget", type=int, default=BUDGET_DEFAULT)
+    p.add_argument("--budget", type=int, default=BUDGET_UNLIMITED)
     p.add_argument("--verbose", action="store_true")
     p.set_defaults(fn=cmd_stats)
 
     p = sub.add_parser("build")
     p.add_argument("--query", default="")
-    p.add_argument("--budget", type=int, default=BUDGET_DEFAULT)
+    p.add_argument("--budget", type=int, default=BUDGET_UNLIMITED)
     p.add_argument("--out")
     p.add_argument("--skills", action="store_true")
     p.set_defaults(fn=cmd_build)
